@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Sistema Vialidad Xico - Independiente</title>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:'Segoe UI',system-ui,-apple-system,Roboto,Arial;background:#EEF2ED;color:#1a1a1a}
+header{background:linear-gradient(135deg,#0F3D2E 0%,#165A43 55%,#C19A3A 135%);color:#fff;padding:16px;position:sticky;top:0;z-index:10;box-shadow:0 4px 18px rgba(0,0,0,.22)}
+header .top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+h1{font-size:20px;margin:0} h1 span{color:#C19A3A} .sub{font-size:12px;opacity:.85}
+.badge{background:#C19A3A;color:#0F3D2E;padding:6px 10px;border-radius:999px;font-weight:800;font-size:12px}
+main{padding:14px;max-width:980px;margin:0 auto;padding-bottom:120px}
+.card{background:#fff;border-radius:14px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.08);margin-bottom:14px;border-top:4px solid #C19A3A}
+label{font-weight:700;font-size:14px;display:block;margin:12px 0 6px}
+input,textarea,select{width:100%;padding:16px;font-size:18px;border:2px solid #ddd;border-radius:12px;outline:none}
+input:focus,textarea:focus{border-color:#0F3D2E}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px} @media(max-width:640px){.row{grid-template-columns:1fr}}
+.toggles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px} @media(max-width:640px){.toggles{grid-template-columns:1fr}}
+.tgl{border:2px solid #ddd;background:#f9f9f9;padding:18px 10px;border-radius:14px;text-align:center;font-weight:800;font-size:15px;cursor:pointer;user-select:none}
+.tgl.on{background:#0F3D2E;color:#fff;border-color:#0F3D2E}
+.tgl.on small{color:#C19A3A}
+.btn{width:100%;padding:18px;border:0;border-radius:14px;font-size:18px;font-weight:900;cursor:pointer}
+.btn-green{background:#0F3D2E;color:#fff} .btn-gold{background:#C19A3A;color:#0F3D2E} .btn-white{background:#fff;border:2px solid #0F3D2E;color:#0F3D2E}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px} @media(max-width:640px){.btn-row{grid-template-columns:1fr}}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px} @media(max-width:640px){.stats{grid-template-columns:1fr 1fr}}
+.stat{background:#0F3D2E;color:#fff;padding:14px;border-radius:12px;text-align:center} .stat b{font-size:26px;display:block} .stat span{font-size:12px;opacity:.9}
+/* TABLA PRO */
+.wrap{overflow:auto;border-radius:16px;border:1px solid #D9E2DA;background:#fff;box-shadow:0 6px 22px rgba(15,61,46,.10)}
+table{width:100%;border-collapse:separate;border-spacing:0;min-width:780px}
+thead th{background:linear-gradient(180deg,#123F2F,#0F3D2E);color:#fff;padding:15px 12px;text-align:left;font-size:12px;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;position:sticky;top:0}
+thead th:first-child{border-top-left-radius:16px} thead th:last-child{border-top-right-radius:16px}
+tbody td{padding:14px 12px;font-size:15px;border-bottom:1px solid #EDF0ED;vertical-align:middle}
+tbody tr:nth-child(even){background:#F6F9F6}
+tbody tr:hover{background:#FFF8E1}
+tbody tr:last-child td{border-bottom:none}
+tbody tr.has-falta{box-shadow:inset 4px 0 0 #D32F2F}
+tbody tr.ok-row{box-shadow:inset 4px 0 0 #2E9E5B}
+.num{width:38px;height:38px;border-radius:10px;background:#0F3D2E;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:14px}
+.placa{display:inline-block;background:linear-gradient(180deg,#fff,#F1F1F1);border:2px solid #0F3D2E;border-radius:8px;padding:6px 10px;font-weight:900;letter-spacing:1.5px;font-size:15px;box-shadow:0 2px 0 #0F3D2E;white-space:nowrap}
+.placa small{display:block;font-size:9px;letter-spacing:2px;color:#C19A3A;text-align:center;font-weight:900}
+.fecha-cell{font-weight:700;color:#333;white-space:nowrap} .fecha-cell small{display:block;color:#888;font-weight:600;font-size:11px}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:900;white-space:nowrap;border:1px solid transparent}
+.pill.si{background:#FDECEC;color:#B71C1C;border-color:#F5C6C6} .pill.no{background:#E8F5EE;color:#1B7A43;border-color:#C6E8D2}
+.pill.warn{background:#FFF3CD;color:#7A5A00;border-color:#FFE08A}
+.obs{max-width:220px;color:#444;line-height:1.35}
+.btn-del{width:40px;height:40px;border-radius:11px;border:1px solid #E0E0E0;background:#fff;cursor:pointer;font-size:16px}
+.btn-del:hover{background:#FDECEC}
+.empty{padding:28px;text-align:center;color:#777} .empty b{color:#0F3D2E;font-size:17px}
+.card{box-shadow:0 8px 26px rgba(0,0,0,.09)}
+.stat{box-shadow:0 4px 14px rgba(0,0,0,.12)} .stat:nth-child(1){background:linear-gradient(135deg,#0F3D2E,#1E6B4D)} .stat:nth-child(2){background:linear-gradient(135deg,#B71C1C,#E53935)} .stat:nth-child(3){background:linear-gradient(135deg,#E65100,#FF9800)} .stat:nth-child(4){background:linear-gradient(135deg,#4A148C,#8E24AA)}
+.small{font-size:13px;color:#666} .ok{color:#0a7a3a;font-weight:800} .sticky{position:fixed;left:0;right:0;bottom:0;background:#fff;padding:12px 14px;box-shadow:0 -4px 20px rgba(0,0,0,.12);z-index:20}
+.tabs{display:flex;gap:8px;margin-bottom:12px} .tab{flex:1;padding:14px;border-radius:12px;border:2px solid #0F3D2E;background:#fff;font-weight:800;cursor:pointer} .tab.act{background:#0F3D2E;color:#fff}
+.hidden{display:none}
+/* SPLASH - PANTALLA DE ENTRADA TIPO DOT */
+#splash{position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,#0F3D2E 0%,#165A43 60%,#0A2A20 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;cursor:pointer;transition:opacity .6s ease, visibility .6s}
+#splash.hide{opacity:0;visibility:hidden;pointer-events:none}
+.dot-wrap{position:relative;width:170px;height:170px;display:flex;align-items:center;justify-content:center}
+.dot-ring{position:absolute;inset:0;border-radius:50%;border:2px solid rgba(193,154,58,.5);animation:ping 1.8s ease-out infinite}
+.dot-ring.r2{animation-delay:.6s}
+@keyframes ping{0%{transform:scale(.7);opacity:1}100%{transform:scale(1.35);opacity:0}}
+.dot{width:150px;height:150px;border-radius:50%;background:#0F3D2E;border:4px solid #C19A3A;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 20px 50px rgba(0,0,0,.45);transition:transform .3s}
+#splash:active .dot{transform:scale(.94)}
+.dot b{font-size:78px;line-height:1;color:#fff;font-weight:900;letter-spacing:-2px}
+.dot span{font-size:15px;letter-spacing:4px;font-weight:900;color:#C19A3A;margin-top:-2px}
+.splash-title{color:#fff;font-size:28px;font-weight:900;text-align:center;line-height:1.1;margin:0}
+.splash-title small{display:block;font-size:14px;letter-spacing:3px;color:#C19A3A;font-weight:800;margin-top:6px}
+.splash-sub{color:rgba(255,255,255,.75);font-size:14px;text-align:center;max-width:280px;line-height:1.4}
+.splash-btn{background:#C19A3A;color:#0F3D2E;border:0;padding:16px 30px;border-radius:999px;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 10px 25px rgba(0,0,0,.3)}
+.splash-foot{position:absolute;bottom:22px;color:rgba(255,255,255,.55);font-size:12px;letter-spacing:1px}
+
+</style><script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script><script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script></head>
+<body>
+<div id="splash" onclick="entrarApp()">
+  <div class="dot-wrap"><div class="dot-ring"></div><div class="dot-ring r2"></div><div class="dot"><b>V</b><span>VIALIDAD</span></div></div>
+  <p class="splash-title">H. AYUNTAMIENTO DE XICO<small>VIALIDAD MUNICIPAL</small></p>
+  <p class="splash-sub">Sistema de Reporte de Operativo de Motos<br>Funciona sin internet • Se guarda en esta tableta</p>
+  <button class="splash-btn" onclick="event.stopPropagation();entrarApp()">▶ &nbsp; TOCA PARA ENTRAR</button>
+  <div class="splash-foot">Xico, Veracruz • 2026-2029</div>
+</div>
+<header><div class="top"><div><h1>XICO <span>• VIALIDAD</span></h1><div class="sub">H. Ayuntamiento 2026-2029 • Sistema Independiente • Funciona sin internet</div></div><div class="badge" id="savedBadge">Guardado ✓</div></div></header>
+<main>
+<div class="tabs"><button class="tab act" onclick="showTab('cap')">📋 Captura</button><button class="tab" onclick="showTab('his')">🗂️ Historial</button><button class="tab" onclick="showTab('inf')">📊 Informe</button></div>
+
+<div id="tab-cap">
+<div class="card"><h2 style="margin:0">Operativo actual</h2>
+<label>Fecha</label><input type="date" id="f_fecha">
+<div class="row"><div><label>Núm. de Operativo</label><input id="f_operativo" placeholder="Ej. 012"></div><div><label>Motivo</label><input id="f_motivo" placeholder="Ej. Operativo de revisión de motos"></div></div>
+<p class="small">Todo se guarda automático en esta tableta. No se pierde al cerrar la app.</p></div>
+
+<div class="card"><h2 style="margin:0">Nuevo registro de moto</h2>
+<label>Núm. de Placa *</label><input id="r_placa" placeholder="EJ. ABC123" style="text-transform:uppercase;font-weight:800;letter-spacing:1px">
+<label>Fecha del registro</label><input type="date" id="r_fecha">
+<label>Faltas — toca para marcar</label>
+<div class="toggles">
+<div class="tgl" id="t_casco" onclick="toggleFalta('casco')">🪖<br>FALTA DE CASCO<br><small>toca para marcar</small></div>
+<div class="tgl" id="t_vel" onclick="toggleFalta('vel')">💨<br>EXCESO VELOCIDAD<br><small>toca para marcar</small></div>
+<div class="tgl" id="t_pas" onclick="toggleFalta('pas')">👥<br>EXCESO PASAJEROS<br><small>toca para marcar</small></div>
+<div class="tgl" id="t_contra" onclick="toggleFalta('contra')">🔄<br>SENTIDO CONTRARIO<br><small>toca para marcar</small></div>
+</div>
+<label>Observaciones</label><textarea id="r_obs" rows="3" placeholder="Ej. Sin licencia, se le hizo recomendación..."></textarea>
+<br><button class="btn btn-green" onclick="agregar()">＋ AGREGAR REGISTRO</button>
+</div>
+
+<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h3 style="margin:0;font-size:19px">🏍️ Registros del operativo</h3><span style="background:#0F3D2E;color:#fff;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:800">XICO • VIALIDAD</span></div><br>
+<div class="stats"><div class="stat"><b id="c_total">0</b><span>Total</span></div><div class="stat"><b id="c_casco">0</b><span>Sin casco</span></div><div class="stat"><b id="c_vel">0</b><span>Exceso vel.</span></div><div class="stat"><b id="c_pas">0</b><span>Exceso pasaj.</span></div><div class="stat"><b id="c_contra">0</b><span>Sentido contrario</span></div></div><br>
+<label>Buscar por placa</label><input id="buscar" placeholder="Escribe placa..." oninput="render()">
+<div class="wrap"><table><thead><tr><th>#</th><th>Fecha</th><th>Núm. de Placa</th><th>🪖 Falta Casco</th><th>💨 Exceso Velocidad</th><th>👥 Exceso Pasajeros</th><th>🔄 Sentido Contrario</th><th>Observaciones</th><th></th></tr></thead><tbody id="tbody"></tbody></table></div><br>
+<label>Descargar informe:</label>
+<div class="btn-row"><button class="btn btn-green" onclick="exportExcel()">DESCARGAR PARA EXCEL (.xlsx real, sin aviso)</button><button class="btn" style="background:#1A73E8;color:#fff" onclick="exportSheets()">DESCARGAR PARA GOOGLE SHEETS (.csv)</button></div>
+<div style="margin-top:10px"><button class="btn btn-white" onclick="copiarParaSheets()">COPIAR TABLA PARA PEGAR EN GOOGLE SHEETS</button></div>
+<div class="btn-row"><button class="btn btn-gold" onclick="guardarOperativo()">GUARDAR OPERATIVO</button><button class="btn btn-white" onclick="respaldar()">RESPALDAR DATOS</button></div>
+<br><div class="btn-row"><button class="btn btn-white" onclick="respaldar()">📦 RESPALDAR DATOS</button><button class="btn btn-white" onclick="document.getElementById('fileRes').click()">♻️ RESTAURAR RESPALDO</button></div><input type="file" id="fileRes" class="hidden" accept=".json" onchange="restaurar(event)">
+</div>
+</div>
+
+<div id="tab-his" class="hidden"><div class="card"><h2>Historial de operativos guardados</h2><p class="small">Aquí están todos los operativos que has guardado en esta tableta.</p><div id="histList"></div></div></div>
+
+<div id="tab-inf" class="hidden"><div class="card"><h2>Informe general</h2><div id="informe"></div><br><div class="btn-row"><button class="btn btn-green" onclick="exportExcel()">INFORME PARA EXCEL (.xlsx)</button><button class="btn" style="background:#1A73E8;color:#fff" onclick="exportSheets()">INFORME PARA GOOGLE SHEETS</button></div></div></div>
+
+<div class="card"><p class="small"><b>Para el encargado:</b> 1) Escribe la placa 2) Marca las faltas tocando los botones 3) Dale a Agregar. Al terminar, dale a Guardar Operativo y Descargar Excel. Cada semana dale a Respaldar Datos y guarda ese archivo en la computadora del Ayuntamiento.<br><br>Palacio Municipal, Miguel Hidalgo Esq. Venustiano Carranza S/N, Xico, Veracruz, C.P. 91240 • ACCIÓN Progreso y Bienestar</p></div>
+</main>
+<div class="sticky"><button class="btn btn-green" onclick="agregar()">＋ AGREGAR REGISTRO RÁPIDO</button></div>
+<script>
+const KEY='vialidad_xico_v2';
+let state=JSON.parse(localStorage.getItem(KEY)||'{"operativos":[],"actual":{"fecha":"","operativo":"","motivo":"","registros":[]}}');
+let faltas={casco:false,vel:false,pas:false,contra:false};
+function hoy(){return new Date().toISOString().slice(0,10)}
+if(!state.actual.fecha) state.actual.fecha=hoy();
+document.getElementById('f_fecha').value=state.actual.fecha;
+document.getElementById('r_fecha').value=hoy();
+document.getElementById('f_operativo').value=state.actual.operativo||'';
+document.getElementById('f_motivo').value=state.actual.motivo||'';
+function save(){ state.actual.fecha=document.getElementById('f_fecha').value; state.actual.operativo=document.getElementById('f_operativo').value; state.actual.motivo=document.getElementById('f_motivo').value; localStorage.setItem(KEY,JSON.stringify(state)); document.getElementById('savedBadge').textContent='Guardado ✓ '+state.actual.registros.length+' registros'; }
+function toggleFalta(k){ faltas[k]=!faltas[k]; document.getElementById('t_casco').classList.toggle('on',faltas.casco); document.getElementById('t_vel').classList.toggle('on',faltas.vel); document.getElementById('t_pas').classList.toggle('on',faltas.pas); document.getElementById('t_contra').classList.toggle('on',faltas.contra); }
+function agregar(){ const placa=document.getElementById('r_placa').value.trim().toUpperCase(); if(!placa){alert('Escribe la placa');return;} state.actual.registros.push({fecha:document.getElementById('r_fecha').value||hoy(),placa,casco:faltas.casco? 'SÍ':'NO',vel:faltas.vel?'SÍ':'NO',pas:faltas.pas?'SÍ':'NO',contra:faltas.contra?'SÍ':'NO',obs:document.getElementById('r_obs').value}); document.getElementById('r_placa').value=''; document.getElementById('r_obs').value=''; faltas={casco:false,vel:false,pas:false,contra:false}; document.querySelectorAll('.tgl').forEach(e=>e.classList.remove('on')); save(); render(); alert('Registro guardado: '+placa); }
+function render(){ const q=(document.getElementById('buscar').value||'').toUpperCase(); const regs=state.actual.registros.filter(r=>r.placa.includes(q)); document.getElementById('tbody').innerHTML=regs.map((r,i)=>{
+  const idx=state.actual.registros.indexOf(r)+1;
+  const hasFalta=(r.casco==='SÍ'||r.vel==='SÍ'||r.pas==='SÍ'||r.contra==='SÍ');
+  const pill=(v,icon)=> v==='SÍ' ? `<span class="pill si">${icon} SÍ</span>` : `<span class="pill no">✓ NO</span>`;
+  return `<tr class="${hasFalta?'has-falta':'ok-row'}"><td><span class="num">${String(idx).padStart(2,'0')}</span></td><td><div class="fecha-cell">${r.fecha}<small>Operativo ${state.actual.operativo||'—'}</small></div></td><td><span class="placa">${r.placa}<small>XICO • VER</small></span></td><td>${pill(r.casco,'🪖')}</td><td>${pill(r.vel,'💨')}</td><td>${pill(r.pas,'👥')}</td><td>${pill(r.contra||'NO','🔄')}</td><td class="obs">${r.obs||'<span style="color:#aaa">— Sin observaciones —</span>'}</td><td><button class="btn-del" onclick="borrar(${state.actual.registros.indexOf(r)})" title="Eliminar">🗑️</button></td></tr>`;
+}).join('')||'<tr><td colspan="9"><div class="empty">🏍️ <b>Sin registros todavía</b><br>Agrega la primera moto arriba y aquí aparecerá con diseño de placa.</div></td></tr>';
+document.getElementById('c_total').textContent=state.actual.registros.length;
+document.getElementById('c_casco').textContent=state.actual.registros.filter(r=>r.casco==='SÍ').length;
+document.getElementById('c_vel').textContent=state.actual.registros.filter(r=>r.vel==='SÍ').length;
+document.getElementById('c_pas').textContent=state.actual.registros.filter(r=>r.pas==='SÍ').length;
+document.getElementById('c_contra').textContent=state.actual.registros.filter(r=>r.contra==='SÍ').length;
+renderHist(); renderInf(); }
+function borrar(i){ if(confirm('¿Borrar este registro?')){ state.actual.registros.splice(i,1); save(); render(); } }
+function guardarOperativo(){ if(!state.actual.registros.length){alert('Agrega al menos un registro');return;} const op={...state.actual,guardadoEn:new Date().toLocaleString('es-MX')}; state.operativos.push(op); state.actual={fecha:hoy(),operativo:'',motivo:'',registros:[]}; document.getElementById('f_operativo').value=''; document.getElementById('f_motivo').value=''; save(); render(); alert('Operativo guardado en historial. Ya puedes empezar uno nuevo.'); }
+function renderHist(){ document.getElementById('histList').innerHTML=state.operativos.map((o,i)=>`<div style="border:1px solid #eee;border-radius:12px;padding:12px;margin-bottom:10px"><b>Operativo ${o.operativo||'—'} • ${o.fecha}</b><br><span class="small">${o.motivo||''} • ${o.registros.length} registros • Guardado: ${o.guardadoEn}</span><br><br><button onclick="cargarOp(${i})" style="padding:12px 16px;border-radius:10px;border:0;background:#0F3D2E;color:#fff;font-weight:800">Abrir</button> <button onclick="borrarOp(${i})" style="padding:12px 16px;border-radius:10px;border:1px solid #ccc;background:#fff">Eliminar</button></div>`).join('')||'<p class="small">Aún no hay operativos guardados.</p>'; }
+function cargarOp(i){ state.actual=JSON.parse(JSON.stringify(state.operativos[i])); document.getElementById('f_fecha').value=state.actual.fecha; document.getElementById('f_operativo').value=state.actual.operativo; document.getElementById('f_motivo').value=state.actual.motivo; save(); render(); showTab('cap'); }
+function borrarOp(i){ if(confirm('¿Eliminar este operativo del historial?')){ state.operativos.splice(i,1); save(); render(); } }
+function renderInf(){ const all=state.operativos.flatMap(o=>o.registros).concat(state.actual.registros); const total=all.length; const sc=all.filter(r=>r.casco==='SÍ').length; const sv=all.filter(r=>r.vel==='SÍ').length; const sp=all.filter(r=>r.pas==='SÍ').length; const sc2=all.filter(r=>r.contra==='SÍ').length; const counts={}; all.forEach(r=>counts[r.placa]=(counts[r.placa]||0)+1); const top=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([p,c])=>`${p} — ${c} veces`).join('<br>')||'Sin datos'; document.getElementById('informe').innerHTML=`<p><b>Total operativos guardados:</b> ${state.operativos.length} (+ 1 en curso)<br><b>Total motos registradas:</b> ${total}<br><b>Sin casco:</b> ${sc} (${total?Math.round(sc/total*100):0}%)<br><b>Exceso velocidad:</b> ${sv} (${total?Math.round(sv/total*100):0}%)<br><b>Exceso pasajeros:</b> ${sp} (${total?Math.round(sp/total*100):0}%)<br><b>Sentido contrario:</b> ${sc2} (${total?Math.round(sc2/total*100):0}%)</p><h3>Placas con más registros</h3><p>${top}</p>`; }
+
+function getRows(){
+  const fecha=state.actual.fecha||hoy(); const op=state.actual.operativo||'S-N';
+  const rows=[
+    ["H. AYUNTAMIENTO DE XICO 2026-2029 - VIALIDAD MUNICIPAL"],
+    ["FECHA: "+fecha+" | NUM DE OPERATIVO: "+op+" | MOTIVO: "+(state.actual.motivo||'')],
+    [],
+    ["FECHA","NUM. DE PLACA","FALTA DE CASCO","POSIBLE EXCESO DE VELOCIDAD","EXCESO DE PASAJEROS","SENTIDO CONTRARIO","OBSERVACIONES"]
+  ];
+  state.actual.registros.forEach(r=>rows.push([r.fecha,r.placa,r.casco,r.vel,r.pas,r.obs||'']));
+  rows.push([]);
+  rows.push(["TOTAL REGISTROS: "+state.actual.registros.length+" | SIN CASCO: "+state.actual.registros.filter(r=>r.casco==='SÍ').length+" | EXCESO VELOCIDAD: "+state.actual.registros.filter(r=>r.vel==='SÍ').length+" | EXCESO PASAJEROS: "+state.actual.registros.filter(r=>r.pas==='SÍ').length+" | SENTIDO CONTRARIO: "+state.actual.registros.filter(r=>r.contra==='SÍ').length]);
+  return {rows,fecha,op};
+}
+function csvEsc(v){ v=String(v==null?'':v); if(v.indexOf('"')>=0||v.indexOf(',')>=0||v.indexOf('\n')>=0) return '"'+v.replace(/"/g,'""')+'"'; return v; }
+
+async function exportExcel(){
+  if(!state.actual.registros.length){alert('Agrega al menos un registro');return;}
+  const fecha=state.actual.fecha||hoy(); const op=state.actual.operativo||'S-N';
+  const motivo=state.actual.motivo||'';
+  const total=state.actual.registros.length;
+  const nCasco=state.actual.registros.filter(r=>r.casco==='SÍ').length;
+  const nVel=state.actual.registros.filter(r=>r.vel==='SÍ').length;
+  const nPas=state.actual.registros.filter(r=>r.pas==='SÍ').length;
+  const nContra=state.actual.registros.filter(r=>r.contra==='SÍ').length;
+  // Si hay ExcelJS (con internet) -> Excel con DISEÑO PROFESIONAL
+  if(window.ExcelJS){
+    try{
+      const wb=new ExcelJS.Workbook();
+      wb.creator='Vialidad Xico'; wb.created=new Date();
+      const ws=wb.addWorksheet('Reporte Operativo',{pageSetup:{paperSize:9,orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0},headerFooter:{oddHeader:'&C&"Calibri,Bold"&14 H. AYUNTAMIENTO DE XICO - VIALIDAD',oddFooter:'&C Pagina &P de &N'}});
+      ws.columns=[{width:14},{width:18},{width:18},{width:24},{width:20},{width:20},{width:38}];
+      const verde='0F3D2E', dorado='C19A3A', doradoClaro='F9EFC7', grisClaro='F2F5F2', blanco='FFFFFF', rojoBg='FDECEC', rojoTxt='B71C1C', verdeBg='E8F5EE', verdeTxt='1B7A43';
+      const thin={style:'thin',color:{argb:'FFD0D7D0'}};
+      const borderAll={top:thin,left:thin,bottom:thin,right:thin};
+      function styleCell(c,fill,font,align,border){
+        c.fill={type:'pattern',pattern:'solid',fgColor:{argb:'FF'+fill}};
+        if(font) c.font=font;
+        if(align) c.alignment=align;
+        if(border) c.border=border;
+      }
+      // FILA 1 - Título principal
+      ws.mergeCells('A1:G1');
+      const t1=ws.getCell('A1'); t1.value='H. AYUNTAMIENTO DE XICO  •  VIALIDAD MUNICIPAL';
+      styleCell(t1,verde,{name:'Calibri',size:15,bold:true,color:{argb:'FF'+blanco}},{horizontal:'center',vertical:'middle'},borderAll);
+      ws.getRow(1).height=32;
+      // FILA 2 - Subtítulo
+      ws.mergeCells('A2:G2');
+      const t2=ws.getCell('A2'); t2.value='REPORTE DE OPERATIVO DE MOTOS  •  2026 - 2029  •  ACCIÓN Progreso y Bienestar';
+      styleCell(t2,dorado,{name:'Calibri',size:10,bold:true,color:{argb:'FF'+verde}},{horizontal:'center',vertical:'middle'},borderAll);
+      ws.getRow(2).height=22;
+      // FILA 3 - Datos del operativo en cajitas
+      ws.mergeCells('A3:B3'); ws.mergeCells('C3:D3'); ws.mergeCells('E3:G3');
+      const d1=ws.getCell('A3'); d1.value='FECHA: '+fecha;
+      const d2=ws.getCell('C3'); d2.value='NÚM. DE OPERATIVO: '+op;
+      const d3=ws.getCell('E3'); d3.value='MOTIVO: '+(motivo||'—');
+      [d1,d2,d3].forEach(c=>styleCell(c,'EAF2EA',{name:'Calibri',size:11,bold:true,color:{argb:'FF'+verde}},{horizontal:'center',vertical:'middle',wrapText:true},borderAll));
+      ws.getRow(3).height=26;
+      // FILA 4 vacía separadora
+      ws.getRow(4).height=8;
+      // FILA 5 - Encabezados de tabla
+      const headers=['FECHA','NÚM. DE PLACA','FALTA DE CASCO','POSIBLE EXCESO DE VELOCIDAD','EXCESO DE PASAJEROS','SENTIDO CONTRARIO','OBSERVACIONES'];
+      const hr=ws.getRow(5);
+      headers.forEach((h,i)=>{
+        const c=hr.getCell(i+1); c.value=h;
+        styleCell(c,verde,{name:'Calibri',size:11,bold:true,color:{argb:'FF'+blanco}},{horizontal:'center',vertical:'middle',wrapText:true},borderAll);
+      });
+      hr.height=30;
+      // FILAS 6... datos
+      state.actual.registros.forEach((r,idx)=>{
+        const row=ws.getRow(6+idx);
+        const vals=[r.fecha,r.placa,r.casco,r.vel,r.pas,r.contra||'NO',r.obs||'—'];
+        const isEven=(idx%2===0);
+        vals.forEach((v,i)=>{
+          const c=row.getCell(i+1); c.value=v;
+          let fill=isEven?blanco:grisClaro;
+          let font={name:'Calibri',size:11,color:{argb:'FF222222'}};
+          let align={vertical:'middle',wrapText:true,horizontal:i===0||i===1?'center':'left'};
+          if(i===1){ font={name:'Calibri',size:12,bold:true,color:{argb:'FF'+verde}}; align.horizontal='center'; }
+          if(i>=2 && i<=5){
+            if(v==='SÍ'){ fill=rojoBg; font={name:'Calibri',size:11,bold:true,color:{argb:'FF'+rojoTxt}}; }
+            if(v==='NO'){ fill=verdeBg; font={name:'Calibri',size:11,bold:true,color:{argb:'FF'+verdeTxt}}; }
+            align.horizontal='center';
+          }
+          styleCell(c,fill,font,align,borderAll);
+        });
+        row.height=24;
+      });
+      const lastRow=6+total-1;
+      // FILA TOTALES
+      const tr=ws.getRow(lastRow+2);
+      ws.mergeCells('A'+(lastRow+2)+':G'+(lastRow+2));
+      const tc=tr.getCell(1);
+      tc.value='TOTAL REGISTROS: '+total+'   |   SIN CASCO: '+nCasco+'   |   EXCESO VELOCIDAD: '+nVel+'   |   EXCESO PASAJEROS: '+nPas+'   |   SENTIDO CONTRARIO: '+nContra;
+      styleCell(tc,dorado,{name:'Calibri',size:12,bold:true,color:{argb:'FF'+verde}},{horizontal:'center',vertical:'middle'},borderAll);
+      tr.height=28;
+      // FILA FIRMA / PIE
+      const fr=ws.getRow(lastRow+4);
+      ws.mergeCells('A'+(lastRow+4)+':C'+(lastRow+4)); ws.mergeCells('D'+(lastRow+4)+':G'+(lastRow+4));
+      const f1=fr.getCell(1); f1.value='_________________________\nENCARGADO DE VIALIDAD';
+      const f2=fr.getCell(4); f2.value='_________________________\nDIRECTOR / AUTORIZÓ';
+      [f1,f2].forEach(c=>styleCell(c,blanco,{name:'Calibri',size:10,color:{argb:'FF555555'}},{horizontal:'center',vertical:'middle',wrapText:true},null));
+      fr.height=42;
+      // FILA PIE AYUNTAMIENTO
+      const pr=ws.getRow(lastRow+6);
+      ws.mergeCells('A'+(lastRow+6)+':G'+(lastRow+6));
+      const pc=pr.getCell(1); pc.value='Palacio Municipal, Miguel Hidalgo Esq. Venustiano Carranza S/N, Xico, Veracruz, C.P. 91240  •  Generado desde Sistema Vialidad Xico';
+      styleCell(pc,blanco,{name:'Calibri',size:9,italic:true,color:{argb:'FF888888'}},{horizontal:'center',vertical:'middle'},null);
+      // Filtros, congelar, imprimir
+      ws.autoFilter={from:'A5',to:'G'+lastRow};
+      ws.views=[{state:'frozen',ySplit:5}];
+      ws.printTitleRows='1:5';
+      // Hoja Resumen con diseño
+      const ws2=wb.addWorksheet('Resumen');
+      ws2.columns=[{width:28},{width:14},{width:18}];
+      ws2.mergeCells('A1:C1'); const s1=ws2.getCell('A1'); s1.value='RESUMEN DEL OPERATIVO '+op;
+      styleCell(s1,verde,{name:'Calibri',size:14,bold:true,color:{argb:'FF'+blanco}},{horizontal:'center',vertical:'middle'},borderAll); ws2.getRow(1).height=30;
+      const resData=[['Concepto','Cantidad','Porcentaje'],['Total motos registradas',total,'100%'],['Sin casco',nCasco,total?Math.round(nCasco/total*100)+'%':'0%'],['Exceso de velocidad',nVel,total?Math.round(nVel/total*100)+'%':'0%'],['Exceso de pasajeros',nPas,total?Math.round(nPas/total*100)+'%':'0%'],['Sentido contrario',nContra,total?Math.round(nContra/total*100)+'%':'0%']];
+      resData.forEach((row,ri)=>{
+        const r=ws2.getRow(3+ri);
+        row.forEach((v,ci)=>{
+          const c=r.getCell(ci+1); c.value=v;
+          if(ri===0) styleCell(c,verde,{name:'Calibri',size:11,bold:true,color:{argb:'FF'+blanco}},{horizontal:'center',vertical:'middle'},borderAll);
+          else styleCell(c,ri%2?grisClaro:blanco,{name:'Calibri',size:11,bold:ci===0},{horizontal:ci===0?'left':'center',vertical:'middle'},borderAll);
+        });
+        r.height=24;
+      });
+      const buf=await wb.xlsx.writeBuffer();
+      const blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Vialidad_Xico_Operativo_'+op+'_'+fecha+'.xlsx'; a.click();
+      return;
+    }catch(e){ console.log(e); alert('No se pudo generar el Excel con diseño, se descargará versión simple.'); }
+  }
+  // Fallback sin internet: CSV simple (sin aviso)
+  const o=getRows(); const csv=o.rows.map(r=>r.map(csvEsc).join(',')).join('\r\n');
+  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Vialidad_Xico_Operativo_'+o.op+'_'+o.fecha+'.csv'; a.click();
+}
+
+function exportSheets(){
+  if(!state.actual.registros.length){alert('Agrega al menos un registro');return;}
+  const o=getRows(); const csv=o.rows.map(r=>r.map(csvEsc).join(',')).join('\r\n');
+  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download="Vialidad_Xico_Operativo_"+o.op+"_"+o.fecha+"_GoogleSheets.csv"; a.click();
+  alert('Descargado para Hojas de Calculo. En Google: drive.google.com > Nuevo > Subir archivo > Abrir con Hojas de Calculo.');
+}
+function copiarParaSheets(){
+  if(!state.actual.registros.length){alert('Agrega al menos un registro');return;}
+  const o=getRows(); const csv=o.rows.map(r=>r.map(csvEsc).join(',')).join('\n');
+  navigator.clipboard.writeText(csv).then(()=>alert('Tabla copiada. Abre una Hoja de Google vacia y pegala con Ctrl+V.')).catch(()=>{ const ta=document.createElement('textarea'); ta.value=csv; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); alert('Tabla copiada. Pegala en Google Sheets con Ctrl+V.'); });
+}
+
+function respaldar(){ const blob=new Blob([JSON.stringify(state)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Respaldo_Vialidad_Xico_'+hoy()+'.json'; a.click(); }
+function restaurar(e){ const f=e.target.files[0]; if(!f) return; const rd=new FileReader(); rd.onload=()=>{ try{ state=JSON.parse(rd.result); save(); render(); alert('Respaldo restaurado.'); }catch(err){ alert('Archivo no válido'); } }; rd.readAsText(f); }
+
+function entrarApp(){ document.getElementById('splash').classList.add('hide'); }
+
+function showTab(t){ document.querySelectorAll('.tab').forEach(b=>b.classList.remove('act')); document.getElementById('tab-cap').classList.toggle('hidden',t!=='cap'); document.getElementById('tab-his').classList.toggle('hidden',t!=='his'); document.getElementById('tab-inf').classList.toggle('hidden',t!=='inf'); }
+document.getElementById('r_placa').addEventListener('input',e=>e.target.value=e.target.value.toUpperCase());
+save(); render();
+</script></body></html>

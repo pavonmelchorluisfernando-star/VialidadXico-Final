@@ -1,0 +1,22 @@
+VIALIDAD XICO - FINAL - COMO ABRIRLO SIN ERRORES
+
+1. Descomprime este ZIP. Te va a quedar UNA SOLA carpeta: VialidadXico_FINAL
+   NO hay carpeta adentro de otra carpeta. Esta es la unica que vas a abrir.
+
+2. Borra TODAS las carpetas viejas:
+   VialidadXico_APK, VialidadXico_APK_Splash_SentidoContrario, etc.
+   Para que Android Studio no te abra la vieja por error.
+
+3. En Android Studio: File > Close Project > Open
+   Selecciona la carpeta VialidadXico_FINAL y dale Select Folder.
+
+4. Si te pide Gradle JDK: elige jbr-21 (Embedded JDK).
+   NO elijas GRADLE_LOCAL_JAVA_HOME.
+
+5. Espera el Sync hasta que diga BUILD SUCCESSFUL.
+   No necesitas la vista Android para compilar.
+
+6. Build > Build App Bundle(s) / APK(s) > Build APK(s)
+   El APK queda en: VialidadXico_FINAL/app/build/outputs/apk/debug/app-debug.apk
+
+Que trae: Splash Dot (toca el logo para entrar) + boton SENTIDO CONTRARIO.

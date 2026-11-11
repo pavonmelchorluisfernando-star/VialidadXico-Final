@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent">
+<WebView android:id="@+id/webView" android:layout_width="match_parent" android:layout_height="match_parent" />
+<LinearLayout android:id="@+id/splashView" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center" android:background="#0F3D2E" android:padding="24dp">
+<FrameLayout android:layout_width="170dp" android:layout_height="170dp" android:layout_gravity="center">
+<View android:layout_width="170dp" android:layout_height="170dp" android:background="@drawable/splash_dot_bg" />
+<LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="center">
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="V" android:textSize="72sp" android:textStyle="bold" android:textColor="#FFFFFF" />
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="VIALIDAD" android:textSize="14sp" android:textStyle="bold" android:textColor="#C19A3A" />
+</LinearLayout></FrameLayout>
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:text="H. AYUNTAMIENTO DE XICO" android:textSize="24sp" android:textStyle="bold" android:textColor="#FFFFFF" android:gravity="center" />
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="VIALIDAD MUNICIPAL" android:textSize="14sp" android:textStyle="bold" android:textColor="#C19A3A" android:gravity="center" />
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="Sistema de Reporte de Operativo de Motos" android:textSize="14sp" android:textColor="#CCFFFFFF" android:gravity="center" />
+<Button android:id="@+id/btnEntrar" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="28dp" android:paddingLeft="32dp" android:paddingRight="32dp" android:text="TOCA PARA ENTRAR" android:textStyle="bold" android:textColor="#0F3D2E" android:backgroundTint="#C19A3A" />
+<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="28dp" android:text="Xico, Veracruz - 2026-2029" android:textSize="12sp" android:textColor="#88FFFFFF" />
+</LinearLayout></FrameLayout>
